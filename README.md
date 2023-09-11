@@ -24,7 +24,7 @@ Secondly, configured Spring Security to use JWT and defined some security rules 
 
 ## Architecture
 
-<img  src="security\src\main\java\com\alibou\security\assets\img\architecture.png">
+<img  src="https://github.com/ozgucdlg/security/blob/master/architecture.png">
 
 
 ## Scripts
