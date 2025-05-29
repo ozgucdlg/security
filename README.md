@@ -1,123 +1,140 @@
-# Spring Boot Security with JWT Authentication and Authorization
+# Spring Security Project
 
-<img align="right" src="https://lh4.googleusercontent.com/-Ft6sZBfS1ojB7Lmqk8PGGpgLZDwaUC2MlRRvBVZbwQLpzOy6aJxrlnvxDfFZRzxgopUm5lRRhwoQ9jEpCzVrSxI77KrUhm-JCl1hFZWTyqqtV-tRN-N63Ng9RUn3mWN4Hz0mEv3=s0" width="200" height="200">
+A robust Spring Security implementation with JWT authentication, role-based access control, and rate limiting.
 
-## Introduction
-This Spring Boot project implements a secure authentication and authorization system using JWT (JSON Web Tokens). The project demonstrates how to secure a Spring Boot 3.0 application using Spring Security 6 and PostgreSQL for user credential storage.
+## Features
 
-Key features:
-- JWT-based authentication
-- Stateless session management
-- Secure password encoding
-- Role-based authorization
-- RESTful API endpoints
-- PostgreSQL database integration
+- 🔐 JWT-based Authentication
+- 👥 Role-based Access Control
+- ⚡ Rate Limiting with Burst Handling
+- 🛡️ Comprehensive Security Configuration
+- 📝 Global Exception Handling
+- 🔄 Configurable Rate Limits
+- 🧹 Automatic Resource Cleanup
 
-## Technologies
-- Java 17
-- Spring Boot 3.1.3
-- Spring Security 6
-- PostgreSQL
-- Maven
-- JWT (JSON Web Tokens)
-- Docker
-- Lombok
+## Prerequisites
 
-### Dependencies
-- Spring Web
-- Spring Data JPA
-- Spring Security
-- PostgreSQL Driver
-- JWT Libraries (jjwt-api, jjwt-impl, jjwt-jackson)
-- Lombok
-
-## Architecture
-
-<img src="https://github.com/ozgucdlg/security/blob/master/architecture.png">
-
-## Getting Started
-
-### Prerequisites
 - Java 17 or higher
-- Maven
-- PostgreSQL
-- Docker (optional)
+- Maven 3.6 or higher
+- PostgreSQL 12 or higher
 
-### Database Setup
-1. Install PostgreSQL
-2. Create a new database
-3. Update `application.properties` with your database credentials
+## Configuration
 
-### Installation
-1. Clone the repository:
-```bash
-git clone https://github.com/ozgucdlg/security.git
-cd security
+### Database Configuration
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/jwtSecurity
+spring.datasource.username=postgres
+spring.datasource.password=password
 ```
 
-2. Build the project:
-```bash
-mvn clean install
+### Rate Limiting Configuration
+```properties
+rate.limit.default=100
+rate.limit.admin=1000
+rate.limit.manager=500
+rate.limit.burst.multiplier=2
 ```
 
-3. Run the application:
-```bash
-mvn spring-boot:run
+### JWT Configuration
+```properties
+jwt.secret=${JWT_SECRET:your-256-bit-secret}
+jwt.expiration=86400000
 ```
 
-### Docker Deployment
-1. Build the Docker image:
-```bash
-docker build -t security-app .
-```
+## Rate Limiting
 
-2. Run the container:
-```bash
-docker run -p 8080:8080 security-app
-```
+The application implements role-based rate limiting with the following default limits:
+
+- **Admin**: 1000 requests per minute
+- **Manager**: 500 requests per minute
+- **Default**: 100 requests per minute
+
+Each role also has a burst multiplier (default: 2x) for handling temporary traffic spikes.
+
+## Security Features
+
+1. **JWT Authentication**
+   - Stateless authentication
+   - Configurable token expiration
+   - Secure token validation
+
+2. **Role-based Access Control**
+   - Hierarchical role system
+   - Fine-grained access control
+   - Role-based rate limiting
+
+3. **Rate Limiting**
+   - Per-role rate limits
+   - Burst handling
+   - Automatic cleanup of unused buckets
+
+4. **Exception Handling**
+   - Global exception handler
+   - Security-specific exceptions
+   - Rate limit exceeded handling
 
 ## API Endpoints
 
-### Public Endpoints
-- POST `/api/v1/auth/register` - Register a new user
-- POST `/api/v1/auth/authenticate` - Authenticate and get JWT token
+### Authentication
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/authenticate` - Authenticate user
+- `POST /api/v1/auth/refresh-token` - Refresh JWT token
 
 ### Protected Endpoints
-- GET `/api/v1/demo` - Demo endpoint (requires authentication)
-- Other endpoints require valid JWT token
+- All other endpoints require valid JWT token
+- Role-based access control applies
 
-## Security Features
-- JWT-based authentication
-- Password encryption using BCrypt
-- Stateless session management
-- CSRF protection disabled for REST API
-- Role-based access control
+## Error Handling
 
-## Testing
-The application has been tested using:
-- Postman for API testing
-- Swagger for API documentation
-- Unit tests for security components
+The application provides consistent error responses for various scenarios:
 
-## Project Structure
+```json
+{
+    "timestamp": "2024-03-14T12:00:00",
+    "message": "Error message",
+    "status": 400
+}
 ```
-src/main/java/com/alibou/security/
-├── auth/           # Authentication related classes
-├── config/         # Security configuration
-├── repository/     # Data access layer
-├── user/          # User related classes
-└── SecurityApplication.java
-```
+
+## Getting Started
+
+1. Clone the repository
+2. Configure the database in `application.properties`
+3. Set up your JWT secret in environment variables
+4. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+## Security Considerations
+
+1. **JWT Security**
+   - Use strong secret keys
+   - Keep token expiration times reasonable
+   - Implement token refresh mechanism
+
+2. **Rate Limiting**
+   - Monitor rate limit thresholds
+   - Adjust limits based on application needs
+   - Consider implementing IP-based rate limiting
+
+3. **Database Security**
+   - Use strong passwords
+   - Implement connection pooling
+   - Regular security updates
 
 ## Contributing
+
 1. Fork the repository
 2. Create your feature branch
 3. Commit your changes
 4. Push to the branch
-5. Create a new Pull Request
+5. Create a Pull Request
 
 ## License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Contact
-For any questions or suggestions, please open an issue in the GitHub repository.
+## Support
+
+For support, please open an issue in the GitHub repository.
