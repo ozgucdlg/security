@@ -3,6 +3,7 @@ package com.alibou.security.dto;
 import com.alibou.security.user.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class UserRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    @NotNull(message = "Role is required")
     private Role role;
 
     private String phoneNumber;

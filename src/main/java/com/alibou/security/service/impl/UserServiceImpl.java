@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEmailVerified(false);
         user.setFailedAttempt(0);
         return userRepository.save(user);
     }

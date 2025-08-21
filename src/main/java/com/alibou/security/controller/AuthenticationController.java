@@ -5,6 +5,7 @@ import com.alibou.security.dto.AuthenticationRequest;
 import com.alibou.security.dto.AuthenticationResponse;
 import com.alibou.security.dto.UserRequest;
 import com.alibou.security.service.UserService;
+import com.alibou.security.user.Role;
 import com.alibou.security.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class AuthenticationController {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(request.getPassword())
-                .role(request.getRole())
+                .role(request.getRole() != null ? request.getRole() : Role.USER) // Default to USER if no role specified
                 .phoneNumber(request.getPhoneNumber())
                 .department(request.getDepartment())
                 .emailVerified(true) // For demo purposes
